@@ -106,6 +106,25 @@ function aktif($id, $sekarang) { return $id === $sekarang ? 'aktif' : ''; }
     .waktu{ color:var(--redup); white-space:nowrap; }
     .kosong{ text-align:center; padding:48px 20px; color:var(--redup); }
     .kosong b{ display:block; color:var(--teks); font-size:16px; margin-bottom:6px; }
+    .ket small{ font-size:11px; opacity:.7; }
+
+    /* ---------- Filter (pill) di atas tabel ---------- */
+    .filter-bar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+    .filter-pill{
+      font-size:13px; color:var(--redup); text-decoration:none; padding:8px 14px;
+      border-radius:999px; border:1px solid var(--garis); transition:.15s;
+    }
+    .filter-pill:hover{ background:rgba(45,226,255,.06); color:var(--teks); }
+    .filter-pill.aktif{ background:rgba(45,226,255,.12); color:#aef6ff; border-color:rgba(45,226,255,.4); }
+
+    /* ---------- Badge lokasi ---------- */
+    .lokasi-badge{
+      display:inline-block; font-size:12px; padding:3px 10px; border-radius:8px;
+      background:rgba(125,145,210,.12); border:1px solid var(--garis); color:var(--teks);
+    }
+    .lokasi-badge.cair{ color:#aef6ff; background:rgba(45,226,255,.10); border-color:rgba(45,226,255,.35); }
+    .lokasi-badge.padat{ color:#ffc6f6; background:rgba(255,61,240,.10); border-color:rgba(255,61,240,.35); }
+    .scene{ font-size:11px; color:var(--redup); margin-top:3px; }
 
     /* ---------- Responsif HP ---------- */
     @media(max-width:760px){
@@ -128,10 +147,10 @@ function aktif($id, $sekarang) { return $id === $sekarang ? 'aktif' : ''; }
         <a class="item <?= aktif('dashboard', $halaman_aktif) ?>" href="dashboard.php">
           <span class="ikon">&#9638;</span> Dashboard
         </a>
-        <a class="item <?= aktif('cair', $halaman_aktif) ?>" href="data_quiz.php?kategori=cair_semipadat">
+        <a class="item <?= aktif('cair', $halaman_aktif) ?>" href="data_quiz.php?lokasi=VRLabSimulation">
           <span class="ikon">&#9680;</span> Data Quiz Cair &amp; Semi Padat
         </a>
-        <a class="item <?= aktif('padat', $halaman_aktif) ?>" href="data_quiz.php?kategori=padat">
+        <a class="item <?= aktif('padat', $halaman_aktif) ?>" href="data_quiz.php?lokasi=VRLabSimulation_Padat">
           <span class="ikon">&#9679;</span> Data Quiz Padat
         </a>
       </nav>

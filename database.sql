@@ -26,12 +26,13 @@ CREATE TABLE IF NOT EXISTS admin (
 
 -- Tabel hasil quiz (diisi otomatis oleh Unity lewat simpan_quiz.php)
 CREATE TABLE IF NOT EXISTS hasil_quiz (
-  id       INT          AUTO_INCREMENT PRIMARY KEY,
-  nama     VARCHAR(100) NOT NULL,                          -- nama siswa
-  kelas    VARCHAR(50)  NOT NULL,                          -- kelas siswa
-  score    INT          NOT NULL DEFAULT 0,                -- skor quiz
-  kategori VARCHAR(20)  NOT NULL DEFAULT 'cair_semipadat', -- 'cair_semipadat' atau 'padat'
-  waktu    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+  id     INT          AUTO_INCREMENT PRIMARY KEY,
+  nama   VARCHAR(100) NOT NULL,                          -- nama siswa
+  kelas  VARCHAR(50)  NOT NULL,                          -- kelas siswa
+  score  INT          NOT NULL DEFAULT 0,                -- skor quiz
+  lokasi VARCHAR(50)  NOT NULL DEFAULT 'VRLab',          -- nama scene Unity:
+                                                         --   VRLab / VRLabSimulation / VRLabSimulation_Padat
+  waktu  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- (Opsional) kalau ada sisa tabel lama dari versi sebelumnya, boleh dibuang:
