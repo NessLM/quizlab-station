@@ -1,67 +1,89 @@
 # QuizLab Station — Dashboard VR Pharmaceutical Lab
 
-Panel admin (login → dashboard) untuk melihat hasil quiz yang dikirim dari game VR (Unity)
-milik SMKN 5 Pangkalpinang. PHP murni + MySQL, dijalankan lewat Laragon.
+Panel admin (login → dashboard) untuk melihat & mengelola hasil quiz dari game VR (Unity)
+SMKN 5 Pangkalpinang. PHP murni + MySQL (Laragon).
 
-## Isi folder
+## Struktur folder
 
-| File | Fungsi |
-|------|--------|
-| `koneksi.php` | Koneksi MySQL (database `quizlab_station`) |
-| `database.sql` | Skema tabel `admin` + `hasil_quiz` |
-| `setup_admin.php` | Membuat akun admin default (jalankan sekali, lalu hapus) |
-| `auth.php` | Penjaga sesi — halaman panel wajib login |
-| `login.php` / `logout.php` | Masuk / keluar |
-| `index.php` | Pengalih ke dashboard / login |
-| `_header.php` / `_footer.php` | Kerangka tampilan (sidebar + CSS) |
-| `dashboard.php` | Ringkasan jumlah data per lokasi |
-| `data_quiz.php` | Tabel hasil quiz, **bisa difilter per lokasi** |
-| `simpan_quiz.php` | **Endpoint** penerima POST dari Unity |
+```
+quizlab-station/
+├── index.php            # pengalih -> login / dashboard
+├── login.php            # halaman login
+├── logout.php
+├── dashboard.php        # ringkasan (jumlah data per lokasi)
+├── data_quiz.php        # tabel hasil + filter lokasi & tanggal + hapus
+├── simpan_quiz.php      # ENDPOINT yang dipanggil Unity (POST)
+├── hapus.php            # proses hapus data (POST + token CSRF)
+├── config/
+│   └── koneksi.php      # koneksi MySQL  ........ (KONEKSI)
+├── includes/
+│   ├── auth.php         # penjaga login + token CSRF
+│   ├── fungsi.php       # fungsi bantu (label lokasi, csrf)
+│   ├── header.php       # kerangka atas + sidebar  (TAMPILAN)
+│   └── footer.php       # kerangka bawah           (TAMPILAN)
+├── assets/css/
+│   ├── style.css        # tampilan panel           (TAMPILAN)
+│   └── login.css        # tampilan login           (TAMPILAN)
+├── database/
+│   ├── database.sql     # skema tabel + ALTER
+│   └── setup_admin.php  # buat akun admin (hapus setelah dipakai)
+└── README.md
+```
 
-## Data yang dikirim Unity (POST ke `simpan_quiz.php`)
+## Database (`quizlab_station`)
 
-| Field | Tipe | Contoh | Keterangan |
-|-------|------|--------|------------|
-| `nama` | string | `Budi` | "-" kalau kosong |
-| `kelas` | string | `XII Farmasi 1` | "-" kalau kosong |
-| `score` | int | `80` | skor quiz |
-| `lokasi` | string | `VRLabSimulation` | nama scene = penanda quiz |
+**Tabel `admin`** — akun login. Kolom `password` disimpan **ter-hash (bcrypt `$2y$...`)**, bukan teks asli.
+Lihat di phpMyAdmin: `quizlab_station` → `admin` → Browse. Default: `admin` / `admin123`.
 
-`lokasi` (nama scene) yang dipakai sebagai filter:
-- `VRLab` → VR Lab (Umum)
-- `VRLabSimulation` → Cair & Semi Padat
-- `VRLabSimulation_Padat` → Padat
+**Tabel `hasil_quiz`** — diisi otomatis oleh Unity:
 
-## Cara setup (lokal, Laragon)
+| Kolom | Keterangan |
+|-------|------------|
+| id | nomor urut |
+| nama, kelas | identitas siswa |
+| score | skor 0–100 (sudah dinormalisasi di Unity) |
+| benar, total | jumlah benar & total soal (tampil `8/10`) |
+| lokasi | nama scene: VRLab / VRLabSimulation / VRLabSimulation_Padat |
+| waktu | waktu kirim (otomatis) |
 
-1. **Laragon → Start All** (Apache + MySQL).
-2. Database & akun admin sudah disiapkan. *(Kalau perlu dari nol: buka
-   `http://localhost/phpmyadmin` → Import `database.sql`, lalu buka
-   `http://localhost/quizlab-station/setup_admin.php` sekali.)*
-3. Login di **`http://localhost/quizlab-station/`**
-   - Username: `admin`
-   - Password: `admin123`  *(ganti setelah ini, dan hapus `setup_admin.php`)*
+## Field POST dari Unity (`simpan_quiz.php`)
 
-## Cara tes dari Unity
+| Field | Tipe | Contoh |
+|-------|------|--------|
+| nama | string | `naza` |
+| kelas | string | `7A` |
+| score | int | `100` |
+| benar | int | `8` |
+| total | int | `30` |
+| lokasi | string | `VRLab` |
 
-1. Di `SummaryUI.cs`, ganti URL endpoint untuk tes lokal:
-   ```csharp
-   // dari:
-   UnityWebRequest.Post("https://vrlabfarmasismkn5pkp.fun/simpan_quiz.php", form)
-   // jadi (tes di Unity Editor / PC yang sama):
-   UnityWebRequest.Post("http://localhost/quizlab-station/simpan_quiz.php", form)
-   ```
-2. Play di Unity, kerjakan quiz sampai layar Summary. Console akan menampilkan:
-   `Data berhasil dikirim: {"status":"sukses",...}`
-3. Buka **`http://localhost/quizlab-station/dashboard.php`** atau menu
-   **Data Quiz** → data muncul, bisa difilter per lokasi.
+## Setup (Laragon)
 
-> **Di headset Quest:** `localhost` menunjuk ke headset sendiri. Ganti dengan IP PC
-> (cek `ipconfig` → IPv4), mis. `http://192.168.1.10/quizlab-station/simpan_quiz.php`,
-> PC & Quest satu WiFi. Android juga memblokir HTTP polos → perlu izinkan *cleartext traffic*.
+1. **Start All** (Apache + MySQL).
+2. Import `database/database.sql` lewat phpMyAdmin (kalau dari nol).
+   - Kalau tabel `hasil_quiz` lama belum punya kolom `benar`/`total`, jalankan ALTER di bagian
+     bawah `database.sql` (tab SQL phpMyAdmin), sekali saja.
+3. Buka `http://localhost/quizlab-station/database/setup_admin.php` (sekali) → buat akun admin → lalu **hapus file itu**.
+4. Login di `http://localhost/quizlab-station/` → `admin` / `admin123`.
 
-## Catatan keamanan
-- Semua query memakai prepared statement.
-- Output data siswa di-escape dengan `htmlspecialchars`.
-- Password admin disimpan ter-hash (`password_hash`).
-- Hapus `setup_admin.php` setelah akun admin dibuat.
+## Fitur panel
+- **Dashboard**: jumlah data per lokasi + 8 data terbaru.
+- **Data Quiz**: tabel dengan kolom Score (0–100) & Benar (`benar/total`).
+  - Filter **lokasi** (Semua / VRLab / VRLabSimulation / VRLabSimulation_Padat).
+  - Filter **tanggal** (kanan atas, default **hari ini**, ada "Semua tanggal").
+  - **Hapus**: centang baris (atau "pilih semua") → tombol **Hapus Terpilih** → konfirmasi "Apakah Anda yakin?".
+
+## Tes dari Unity (lokal)
+Di `SummaryUI.cs`, untuk tes lokal ganti URL:
+```csharp
+UnityWebRequest.Post("http://localhost/quizlab-station/simpan_quiz.php", form)
+```
+Play → kerjakan quiz → buka **Data Quiz** di web (default tampil hari ini).
+
+> **Quest:** ganti `localhost` dengan IP PC (`ipconfig` → IPv4), PC & Quest satu WiFi,
+> dan izinkan *cleartext traffic* di Android.
+
+## Keamanan
+- Semua query: prepared statement. Output: `htmlspecialchars`.
+- Password admin: `password_hash` (bcrypt). Hapus `database/setup_admin.php` setelah dipakai.
+- Hapus data: wajib login + POST + token CSRF.

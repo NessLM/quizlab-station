@@ -2,10 +2,11 @@
 // =====================================================================
 //  dashboard.php — Halaman utama setelah login (ringkasan)
 // =====================================================================
-require 'auth.php';      // wajib login
-require 'koneksi.php';
+require __DIR__ . '/includes/auth.php';      // wajib login
+require __DIR__ . '/config/koneksi.php';
+require __DIR__ . '/includes/fungsi.php';
 
-// Fungsi bantu: hitung jumlah baris hasil_quiz (opsional difilter lokasi)
+// Hitung jumlah baris hasil_quiz (opsional difilter lokasi)
 function hitung($koneksi, $lokasi = null)
 {
     if ($lokasi === null) {
@@ -20,26 +21,19 @@ function hitung($koneksi, $lokasi = null)
     return $n;
 }
 
-// Label ramah untuk tiap lokasi (nama scene Unity)
-$LABEL_LOKASI = [
-    'VRLab'                 => 'VR Lab (Umum)',
-    'VRLabSimulation'       => 'Cair & Semi Padat',
-    'VRLabSimulation_Padat' => 'Padat',
-];
-
 $totalSemua = hitung($koneksi);
 $totalVRLab = hitung($koneksi, 'VRLab');
 $totalCair  = hitung($koneksi, 'VRLabSimulation');
 $totalPadat = hitung($koneksi, 'VRLabSimulation_Padat');
 
-// Ambil 8 data terbaru
-$stmt = mysqli_prepare($koneksi, 'SELECT nama, kelas, score, lokasi, waktu FROM hasil_quiz ORDER BY waktu DESC, id DESC LIMIT 8');
+// 8 data terbaru
+$stmt = mysqli_prepare($koneksi, 'SELECT nama, kelas, score, benar, total, lokasi, waktu FROM hasil_quiz ORDER BY waktu DESC, id DESC LIMIT 8');
 mysqli_stmt_execute($stmt);
 $terbaru = mysqli_stmt_get_result($stmt);
 
 $judul_halaman = 'Dashboard';
 $halaman_aktif = 'dashboard';
-require '_header.php';
+require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="stat-grid">
@@ -70,19 +64,18 @@ require '_header.php';
   <?php else: ?>
     <table>
       <thead>
-        <tr><th>Nama</th><th>Kelas</th><th>Score</th><th>Lokasi</th><th>Waktu</th></tr>
+        <tr><th>Nama</th><th>Kelas</th><th>Score</th><th>Benar</th><th>Lokasi</th><th>Waktu</th></tr>
       </thead>
       <tbody>
         <?php while ($b = mysqli_fetch_assoc($terbaru)):
             $lok = $b['lokasi'];
-            $labelLok = $LABEL_LOKASI[$lok] ?? $lok;
-            $kls = $lok === 'VRLabSimulation' ? 'cair' : ($lok === 'VRLabSimulation_Padat' ? 'padat' : '');
         ?>
           <tr>
             <td class="nama"><?= htmlspecialchars($b['nama']) ?></td>
             <td><?= htmlspecialchars($b['kelas']) ?></td>
             <td><span class="skor"><?= (int) $b['score'] ?></span></td>
-            <td><span class="lokasi-badge <?= $kls ?>"><?= htmlspecialchars($labelLok) ?></span></td>
+            <td class="benar"><?= (int) $b['benar'] ?><small>/<?= (int) $b['total'] ?></small></td>
+            <td><span class="lokasi-badge <?= kelasLokasi($lok) ?>"><?= htmlspecialchars(labelLokasi($lok)) ?></span></td>
             <td class="waktu"><?= htmlspecialchars(date('d M Y, H:i', strtotime($b['waktu']))) ?></td>
           </tr>
         <?php endwhile; ?>
@@ -93,4 +86,4 @@ require '_header.php';
 
 <?php
 mysqli_stmt_close($stmt);
-require '_footer.php';
+require __DIR__ . '/includes/footer.php';

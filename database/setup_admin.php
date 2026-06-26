@@ -1,11 +1,11 @@
 <?php
 // =====================================================================
-//  setup_admin.php — Buat akun admin default (JALANKAN SEKALI SAJA)
-//  Buka di browser: http://localhost/quizlab-station/setup_admin.php
+//  database/setup_admin.php — Buat akun admin default (JALANKAN SEKALI)
+//  Buka: http://localhost/quizlab-station/database/setup_admin.php
 //  Setelah akun jadi, HAPUS file ini demi keamanan.
 // =====================================================================
 
-require 'koneksi.php';
+require __DIR__ . '/../config/koneksi.php';
 
 // Akun default — GANTI password setelah berhasil login!
 $username      = 'admin';
@@ -32,6 +32,7 @@ header('Content-Type: text/plain; charset=utf-8');
 if ($sudahAda) {
     echo "Akun admin '$username' sudah ada. Tidak dibuat ulang.\n";
 } else {
+    // Password disimpan TER-HASH (bcrypt) — bukan teks asli
     $hash = password_hash($passwordPlain, PASSWORD_DEFAULT);
     $stmt = mysqli_prepare($koneksi, 'INSERT INTO admin (username, password) VALUES (?, ?)');
     mysqli_stmt_bind_param($stmt, 'ss', $username, $hash);
@@ -41,10 +42,10 @@ if ($sudahAda) {
     if ($ok) {
         echo "Akun admin berhasil dibuat!\n";
         echo "  Username : $username\n";
-        echo "  Password : $passwordPlain\n";
+        echo "  Password : $passwordPlain   (tersimpan ter-hash di database)\n";
     } else {
         echo "Gagal membuat akun admin: " . mysqli_error($koneksi) . "\n";
     }
 }
 
-echo "\nPENTING: hapus file setup_admin.php ini setelah selesai, lalu login di login.php.\n";
+echo "\nPENTING: hapus file ini setelah selesai, lalu login di ../login.php\n";
