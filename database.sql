@@ -1,37 +1,38 @@
 -- =====================================================================
 --  QuizLab Station — SMKN 5 Pangkalpinang
---  Skema database untuk dashboard pendamping game VR edukasi
+--  Database untuk panel admin + penampung hasil quiz dari Unity (VR)
 -- =====================================================================
---
---  CARA MENJALANKAN di phpMyAdmin:
---  1. Pastikan Laragon menyala (Apache + MySQL "Start All").
---  2. Buka browser ke  http://localhost/phpmyadmin
---  3. Klik tab "Import" di menu atas.
---  4. Klik "Choose File" / "Pilih File", pilih file database.sql ini.
---  5. Scroll ke bawah lalu klik tombol "Import" / "Kirim".
---
---  Alternatif (tanpa import file):
---  - Klik tab "SQL", lalu salin–tempel seluruh isi file ini,
---    kemudian klik "Go" / "Kirim".
---
---  Setelah berhasil, akan terbentuk database "quizlab_station"
---  beserta tabel "siswa".
+--  CARA IMPORT di phpMyAdmin:
+--   1. Laragon -> Start All (Apache + MySQL).
+--   2. Buka  http://localhost/phpmyadmin  -> tab "Import".
+--   3. Pilih file ini -> klik "Go"/"Kirim".
+--   4. Lalu buka  http://localhost/quizlab-station/setup_admin.php  (sekali saja)
+--      untuk membuat akun admin default.
 -- =====================================================================
 
--- 1) Buat database (kalau belum ada) dengan charset Unicode penuh
 CREATE DATABASE IF NOT EXISTS quizlab_station
   CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 
--- 2) Pakai database tersebut untuk perintah berikutnya
 USE quizlab_station;
 
--- 3) Buat tabel siswa
-CREATE TABLE IF NOT EXISTS siswa (
-  id     INT          AUTO_INCREMENT PRIMARY KEY,        -- ID unik tiap siswa
-  nama   VARCHAR(100) NOT NULL,                          -- Nama lengkap siswa
-  kelas  VARCHAR(50)  NOT NULL,                          -- Kelas, mis. "XI RPL 1"
-  benar  INT          NOT NULL DEFAULT 0,                -- Jumlah jawaban benar (diisi dari VR)
-  salah  INT          NOT NULL DEFAULT 0,                -- Jumlah jawaban salah (diisi dari VR)
-  waktu  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP -- Waktu pendaftaran otomatis
+-- Tabel akun admin (untuk login ke panel)
+CREATE TABLE IF NOT EXISTS admin (
+  id       INT          AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50)  NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,                          -- disimpan ter-hash (password_hash)
+  dibuat   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Tabel hasil quiz (diisi otomatis oleh Unity lewat simpan_quiz.php)
+CREATE TABLE IF NOT EXISTS hasil_quiz (
+  id       INT          AUTO_INCREMENT PRIMARY KEY,
+  nama     VARCHAR(100) NOT NULL,                          -- nama siswa
+  kelas    VARCHAR(50)  NOT NULL,                          -- kelas siswa
+  score    INT          NOT NULL DEFAULT 0,                -- skor quiz
+  kategori VARCHAR(20)  NOT NULL DEFAULT 'cair_semipadat', -- 'cair_semipadat' atau 'padat'
+  waktu    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- (Opsional) kalau ada sisa tabel lama dari versi sebelumnya, boleh dibuang:
+-- DROP TABLE IF EXISTS siswa;

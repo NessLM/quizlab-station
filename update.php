@@ -19,7 +19,8 @@ require 'koneksi.php';
 const KUNCI_RAHASIA = 'quizlab-rahasia-2026';
 
 // Fungsi bantu: kirim balasan JSON lalu hentikan program
-function balas(bool $sukses, string $pesan): void {
+function balas(bool $sukses, string $pesan): void
+{
     echo json_encode(['sukses' => $sukses, 'pesan' => $pesan]);
     exit;
 }
@@ -42,9 +43,11 @@ $idMentah    = $_POST['id']    ?? '';
 $benarMentah = $_POST['benar'] ?? '';
 $salahMentah = $_POST['salah'] ?? '';
 
-if (!ctype_digit((string) $idMentah)
+if (
+    !ctype_digit((string) $idMentah)
     || !ctype_digit((string) $benarMentah)
-    || !ctype_digit((string) $salahMentah)) {
+    || !ctype_digit((string) $salahMentah)
+) {
     http_response_code(400); // Bad Request
     balas(false, 'Data tidak valid: id, benar, dan salah harus berupa angka.');
 }

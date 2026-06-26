@@ -13,8 +13,8 @@ require 'koneksi.php';
 // Ambil semua siswa, terbaru di atas.
 // Memakai prepared statement agar konsisten dengan aturan keamanan.
 $stmt = mysqli_prepare(
-    $koneksi,
-    'SELECT id, nama, kelas, benar, salah, waktu
+  $koneksi,
+  'SELECT id, nama, kelas, benar, salah, waktu
        FROM siswa
    ORDER BY waktu DESC, id DESC'
 );
@@ -25,22 +25,27 @@ $jumlahSiswa = mysqli_num_rows($data);
 ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>QuizLab Station — Hasil Quiz Siswa</title>
   <style>
     :root {
-      --bg:        #06070f;
-      --cyan:      #2de2ff;
-      --magenta:   #ff3df0;
-      --teks:      #eaf0ff;
-      --teks-redup:#8b93b8;
-      --kartu:     rgba(18, 22, 42, 0.66);
-      --garis:     rgba(125, 145, 210, 0.20);
+      --bg: #06070f;
+      --cyan: #2de2ff;
+      --magenta: #ff3df0;
+      --teks: #eaf0ff;
+      --teks-redup: #8b93b8;
+      --kartu: rgba(18, 22, 42, 0.66);
+      --garis: rgba(125, 145, 210, 0.20);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
@@ -48,16 +53,22 @@ $jumlahSiswa = mysqli_num_rows($data);
       min-height: 100vh;
       padding: 36px 18px;
       background:
-        radial-gradient(58% 70% at 12% 6%,  rgba(45, 226, 255, 0.13), transparent 60%),
+        radial-gradient(58% 70% at 12% 6%, rgba(45, 226, 255, 0.13), transparent 60%),
         radial-gradient(55% 65% at 90% 96%, rgba(255, 61, 240, 0.13), transparent 60%),
         var(--bg);
       background-attachment: fixed;
     }
 
-    .wadah { max-width: 980px; margin: 0 auto; }
+    .wadah {
+      max-width: 980px;
+      margin: 0 auto;
+    }
 
     /* ---------- Header halaman ---------- */
-    header { text-align: center; margin-bottom: 26px; }
+    header {
+      text-align: center;
+      margin-bottom: 26px;
+    }
 
     .label-sekolah {
       display: inline-block;
@@ -78,9 +89,14 @@ $jumlahSiswa = mysqli_num_rows($data);
       color: #f6f8ff;
       text-shadow:
         -2px 0 0 rgba(45, 226, 255, 0.85),
-         2px 0 0 rgba(255, 61, 240, 0.85);
+        2px 0 0 rgba(255, 61, 240, 0.85);
     }
-    .subjudul { margin-top: 8px; color: var(--teks-redup); font-size: 14px; }
+
+    .subjudul {
+      margin-top: 8px;
+      color: var(--teks-redup);
+      font-size: 14px;
+    }
 
     /* ---------- Baris aksi (tombol kembali + ringkasan) ---------- */
     .baris-aksi {
@@ -91,6 +107,7 @@ $jumlahSiswa = mysqli_num_rows($data);
       justify-content: space-between;
       margin-bottom: 16px;
     }
+
     .tautan-kembali {
       display: inline-flex;
       align-items: center;
@@ -103,15 +120,20 @@ $jumlahSiswa = mysqli_num_rows($data);
       padding: 9px 18px;
       transition: background 0.18s, box-shadow 0.18s;
     }
+
     .tautan-kembali:hover {
       background: rgba(45, 226, 255, 0.10);
       box-shadow: 0 0 18px rgba(45, 226, 255, 0.25);
     }
+
     .ringkasan {
       font-size: 13px;
       color: var(--teks-redup);
     }
-    .ringkasan strong { color: var(--teks); }
+
+    .ringkasan strong {
+      color: var(--teks);
+    }
 
     /* ---------- Kartu tabel ---------- */
     .kartu {
@@ -123,14 +145,16 @@ $jumlahSiswa = mysqli_num_rows($data);
       box-shadow:
         0 24px 60px rgba(0, 0, 0, 0.55),
         inset 0 1px 0 rgba(255, 255, 255, 0.06);
-      overflow-x: auto;            /* tabel bisa digeser di layar HP */
+      overflow-x: auto;
+      /* tabel bisa digeser di layar HP */
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 14px;
-      min-width: 620px;            /* jaga keterbacaan; container yang scroll */
+      min-width: 620px;
+      /* jaga keterbacaan; container yang scroll */
     }
 
     thead th {
@@ -148,11 +172,23 @@ $jumlahSiswa = mysqli_num_rows($data);
       padding: 13px 14px;
       border-bottom: 1px solid rgba(125, 145, 210, 0.10);
     }
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: rgba(45, 226, 255, 0.05); }
 
-    .col-id { color: var(--teks-redup); font-variant-numeric: tabular-nums; }
-    .nama   { font-weight: 600; }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background: rgba(45, 226, 255, 0.05);
+    }
+
+    .col-id {
+      color: var(--teks-redup);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .nama {
+      font-weight: 600;
+    }
 
     /* Pil nilai: benar = cyan, salah = magenta (warna lensa anaglyph) */
     .pil {
@@ -164,17 +200,23 @@ $jumlahSiswa = mysqli_num_rows($data);
       border-radius: 8px;
       padding: 3px 10px;
     }
+
     .pil-benar {
       color: #aef6ff;
       background: rgba(45, 226, 255, 0.12);
       border: 1px solid rgba(45, 226, 255, 0.4);
     }
+
     .pil-salah {
       color: #ffc6f6;
       background: rgba(255, 61, 240, 0.12);
       border: 1px solid rgba(255, 61, 240, 0.4);
     }
-    .waktu { color: var(--teks-redup); white-space: nowrap; }
+
+    .waktu {
+      color: var(--teks-redup);
+      white-space: nowrap;
+    }
 
     /* ---------- Keadaan kosong ---------- */
     .kosong {
@@ -182,13 +224,24 @@ $jumlahSiswa = mysqli_num_rows($data);
       padding: 48px 20px;
       color: var(--teks-redup);
     }
-    .kosong strong { color: var(--teks); display: block; margin-bottom: 6px; font-size: 16px; }
+
+    .kosong strong {
+      color: var(--teks);
+      display: block;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
 
     @media (prefers-reduced-motion: reduce) {
-      .tautan-kembali, tbody tr { transition: none; }
+
+      .tautan-kembali,
+      tbody tr {
+        transition: none;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="wadah">
 
@@ -241,6 +294,7 @@ $jumlahSiswa = mysqli_num_rows($data);
 
   </div>
 </body>
+
 </html>
 <?php
 mysqli_stmt_close($stmt);

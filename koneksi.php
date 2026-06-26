@@ -1,23 +1,19 @@
 <?php
 // =====================================================================
-//  koneksi.php — Koneksi ke database MySQL (QuizLab Station)
-//
-//  Dipakai oleh semua file PHP lain lewat:  require 'koneksi.php';
-//  Pengaturan ini sesuai bawaan Laragon (user root, password kosong).
+//  koneksi.php — Koneksi ke MySQL lokal (Laragon)
+//  Dipakai oleh semua halaman lewat:  require 'koneksi.php';
 // =====================================================================
 
-$host = 'localhost';        // Server database (Laragon = localhost)
-$user = 'root';             // Username MySQL bawaan Laragon
-$pass = '';                 // Password kosong (bawaan Laragon)
-$db   = 'quizlab_station';  // Nama database (lihat database.sql)
+$host = 'localhost';        // Laragon = localhost
+$user = 'root';             // user bawaan Laragon
+$pass = '';                 // password kosong (bawaan Laragon)
+$db   = 'quizlab_station';  // nama database (lihat database.sql)
 
-// Buat koneksi memakai mysqli (gaya prosedural)
 $koneksi = mysqli_connect($host, $user, $pass, $db);
 
-// Hentikan program kalau koneksi gagal, tampilkan alasannya
 if (!$koneksi) {
-    die('Koneksi database gagal: ' . mysqli_connect_error());
+    die('Koneksi database gagal: ' . mysqli_connect_error()
+        . '<br>Pastikan MySQL di Laragon sudah nyala & database.sql sudah di-import.');
 }
 
-// Pakai charset utf8mb4 agar huruf/karakter Unicode tersimpan benar
 mysqli_set_charset($koneksi, 'utf8mb4');
