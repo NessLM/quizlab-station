@@ -89,14 +89,13 @@ require __DIR__ . '/includes/header.php';
     <input type="hidden" name="lokasi" value="<?= htmlspecialchars($lokasi) ?>">
     <label for="tgl">Tanggal</label>
     <input type="date" id="tgl" name="tanggal" value="<?= $tanggal === 'semua' ? '' : htmlspecialchars($tanggal) ?>">
-    <button type="submit" class="btn">Terapkan</button>
+    <button type="submit" class="btn btn-oranye">Terapkan</button>
     <a class="btn" href="data_quiz.php?lokasi=<?= urlencode($lokasi) ?>&tanggal=semua">Semua tanggal</a>
   </form>
 </div>
 
-<!-- Form hapus membungkus tabel -->
-<form method="post" action="hapus.php"
-      onsubmit="return confirm('Apakah Anda yakin ingin menghapus data yang dicentang? Tindakan ini tidak bisa dibatalkan.');">
+<!-- Form hapus membungkus tabel (konfirmasi pakai modal UI, lihat bawah) -->
+<form method="post" action="hapus.php" id="formHapus">
   <?= csrfField() ?>
   <input type="hidden" name="kembali" value="<?= htmlspecialchars($lokasi . '|' . $tanggal) ?>">
 
@@ -146,14 +145,69 @@ require __DIR__ . '/includes/header.php';
   </div>
 </form>
 
+<!-- Modal konfirmasi hapus (pengganti alert bawaan browser) -->
+<div class="modal-overlay" id="modalHapus" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-ikon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+        <line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
+      </svg>
+    </div>
+    <h3 id="modalJudul">Hapus data?</h3>
+    <p id="modalPesan">Data yang dihapus tidak bisa dikembalikan. Lanjutkan?</p>
+    <div class="modal-aksi">
+      <button type="button" class="btn" id="batalHapus">Batal</button>
+      <button type="button" class="btn btn-danger" id="yaHapus">Ya, Hapus</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  // Centang "pilih semua" -> centang/lepas semua baris
-  const cekSemua = document.getElementById('cekSemua');
-  if (cekSemua) {
-    cekSemua.addEventListener('change', function () {
-      document.querySelectorAll('.pilih').forEach(c => c.checked = cekSemua.checked);
-    });
-  }
+  (function () {
+    const form     = document.getElementById('formHapus');
+    const overlay  = document.getElementById('modalHapus');
+    const btnBatal = document.getElementById('batalHapus');
+    const btnYa    = document.getElementById('yaHapus');
+    const judul    = document.getElementById('modalJudul');
+    const pesan    = document.getElementById('modalPesan');
+    const cekSemua = document.getElementById('cekSemua');
+
+    // Centang "pilih semua" -> centang/lepas semua baris
+    if (cekSemua) {
+      cekSemua.addEventListener('change', function () {
+        document.querySelectorAll('.pilih').forEach(c => c.checked = cekSemua.checked);
+      });
+    }
+
+    function tutup() { overlay.classList.remove('tampil'); }
+
+    // Klik "Hapus Terpilih" -> tampilkan modal (bukan alert browser)
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const n = document.querySelectorAll('.pilih:checked').length;
+        if (n === 0) {
+          judul.textContent = 'Belum ada yang dipilih';
+          pesan.textContent = 'Centang dulu kotak di samping data yang ingin dihapus.';
+          btnYa.style.display = 'none';
+          btnBatal.textContent = 'Mengerti';
+        } else {
+          judul.textContent = 'Hapus ' + n + ' data?';
+          pesan.textContent = 'Data yang dihapus tidak bisa dikembalikan. Lanjutkan?';
+          btnYa.style.display = '';
+          btnBatal.textContent = 'Batal';
+        }
+        overlay.classList.add('tampil');
+      });
+    }
+
+    btnBatal.addEventListener('click', tutup);
+    btnYa.addEventListener('click', function () { tutup(); form.submit(); });
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) tutup(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') tutup(); });
+  })();
 </script>
 
 <?php

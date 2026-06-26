@@ -1,157 +1,175 @@
 /* =====================================================================
-   style.css — Tampilan panel admin QuizLab Station (tema gelap anaglyph)
+   style.css — Panel admin QuizLab Station
+   Tema: SMKN 5 Pangkalpinang (oranye + biru + kuning, latar terang)
    ===================================================================== */
 :root{
-  --bg:#06070f; --cyan:#2de2ff; --magenta:#ff3df0;
-  --teks:#eaf0ff; --redup:#8b93b8; --kartu:rgba(18,22,42,.7); --garis:rgba(125,145,210,.18);
+  --oranye:#F47A1F; --oranye-tua:#DA6510;
+  --biru:#2278B5;   --biru-tua:#1B5E8F;
+  --kuning:#FFC107;
+  --bg:#EEF2F7; --kartu:#FFFFFF;
+  --teks:#2B3A4B; --redup:#73839A; --garis:#E2E8F0;
+  --hijau:#16774E; --merah:#E14B4B;
 }
 *{ box-sizing:border-box; margin:0; padding:0; }
 body{
-  font-family:"Segoe UI",system-ui,Arial,sans-serif; color:var(--teks); min-height:100vh;
-  background:
-    radial-gradient(50% 60% at 100% 0, rgba(255,61,240,.10), transparent 60%),
-    radial-gradient(50% 60% at 0 100%, rgba(45,226,255,.10), transparent 60%), var(--bg);
+  font-family:"Segoe UI",system-ui,Arial,sans-serif; color:var(--teks);
+  background:var(--bg); min-height:100vh;
 }
 .app{ display:flex; min-height:100vh; }
 
-/* ---------- Sidebar ---------- */
+/* ---------- Sidebar (oranye) ---------- */
 .sidebar{
-  width:262px; flex-shrink:0; background:rgba(8,10,20,.88); border-right:1px solid var(--garis);
+  width:264px; flex-shrink:0; color:#fff;
+  background:linear-gradient(180deg, #F58A2B 0%, #E2620E 100%);
   display:flex; flex-direction:column; padding:22px 16px; position:sticky; top:0; height:100vh;
 }
-.brand{ text-align:center; margin-bottom:26px; }
-.brand .nama{
-  font-size:22px; font-weight:800; color:#f6f8ff;
-  text-shadow:-2px 0 0 rgba(45,226,255,.85), 2px 0 0 rgba(255,61,240,.85);
-}
-.brand .sub{ display:block; font-size:10px; letter-spacing:3px; color:var(--redup); margin-top:6px; }
+.brand{ text-align:center; margin-bottom:22px; padding-bottom:18px; border-bottom:1px solid rgba(255,255,255,.28); }
+.brand .nama{ font-size:22px; font-weight:800; color:#fff; letter-spacing:.3px; }
+.brand .sub{ display:block; font-size:10px; letter-spacing:3px; color:rgba(255,255,255,.85); margin-top:6px; }
 
 .menu{ display:flex; flex-direction:column; gap:6px; flex:1; }
 .item{
-  display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:11px;
-  color:var(--redup); text-decoration:none; font-size:14px; border:1px solid transparent; transition:.15s;
+  display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:10px;
+  color:rgba(255,255,255,.92); text-decoration:none; font-size:14px; font-weight:500; transition:.15s;
 }
-.item:hover{ background:rgba(45,226,255,.06); color:var(--teks); }
-.item.aktif{
-  background:rgba(45,226,255,.10); color:#aef6ff; border-color:rgba(45,226,255,.35);
-  box-shadow:inset 3px 0 0 var(--cyan);
-}
+.item:hover{ background:rgba(255,255,255,.18); }
+.item.aktif{ background:#fff; color:var(--oranye-tua); font-weight:700; box-shadow:0 4px 12px rgba(0,0,0,.12); }
 .item .ikon{ font-size:15px; width:20px; text-align:center; }
 
-.sidebar-bawah{ border-top:1px solid var(--garis); padding-top:14px; margin-top:14px; }
-.user{ font-size:13px; color:var(--redup); padding:4px 14px 10px; }
-.user b{ color:var(--teks); }
+.sidebar-bawah{ border-top:1px solid rgba(255,255,255,.28); padding-top:14px; margin-top:14px; }
+.user{ font-size:13px; color:rgba(255,255,255,.9); padding:4px 14px 10px; }
+.user b{ color:#fff; }
 .keluar{
-  display:flex; align-items:center; gap:10px; padding:11px 14px; border-radius:11px;
-  color:#ffc6d1; text-decoration:none; font-size:14px; border:1px solid rgba(255,61,240,.25);
+  display:flex; align-items:center; gap:10px; padding:11px 14px; border-radius:10px;
+  color:#fff; text-decoration:none; font-size:14px; font-weight:600; background:rgba(0,0,0,.14);
 }
-.keluar:hover{ background:rgba(255,61,240,.10); }
+.keluar:hover{ background:rgba(0,0,0,.24); }
 
 /* ---------- Konten ---------- */
 .konten{ flex:1; display:flex; flex-direction:column; min-width:0; }
 .topbar{
-  padding:20px 28px; border-bottom:1px solid var(--garis);
-  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:18px 28px; background:#fff; border-bottom:1px solid var(--garis);
+  display:flex; align-items:center; justify-content:space-between; gap:12px; position:sticky; top:0; z-index:5;
 }
-.topbar h1{ font-size:21px; font-weight:700; }
-.topbar .sekolah{ font-size:11px; letter-spacing:2px; color:var(--redup); text-transform:uppercase; }
-.isi{ padding:26px 28px; flex:1; }
+.topbar h1{ font-size:21px; font-weight:800; color:var(--teks); display:flex; align-items:center; gap:10px; }
+.topbar h1::before{ content:""; width:6px; height:22px; border-radius:3px; background:var(--oranye); }
+.topbar .sekolah{ font-size:11px; letter-spacing:2px; color:var(--biru); text-transform:uppercase; font-weight:700; }
+.isi{ padding:24px 28px; flex:1; }
 
 /* ---------- Kartu statistik ---------- */
-.stat-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:16px; margin-bottom:24px; }
+.stat-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:16px; margin-bottom:22px; }
 .stat{
-  background:var(--kartu); border:1px solid var(--garis); border-radius:16px; padding:20px;
-  box-shadow:0 16px 40px rgba(0,0,0,.4);
+  background:var(--kartu); border:1px solid var(--garis); border-radius:14px; padding:18px 20px;
+  box-shadow:0 6px 18px rgba(31,58,90,.06); border-top:4px solid var(--oranye);
 }
-.stat .angka{ font-size:34px; font-weight:800; color:var(--cyan); line-height:1; }
-.stat.magenta .angka{ color:var(--magenta); }
+.stat.biru{ border-top-color:var(--biru); }
+.stat .angka{ font-size:32px; font-weight:800; color:var(--oranye); line-height:1; }
+.stat.biru .angka{ color:var(--biru); }
 .stat .ket{ font-size:13px; color:var(--redup); margin-top:8px; }
-.ket small{ font-size:11px; opacity:.7; }
+.ket small{ font-size:11px; opacity:.8; }
 
-/* ---------- Baris filter (pills kiri + filter tanggal kanan) ---------- */
+/* ---------- Baris filter (pills kiri + tanggal kanan) ---------- */
 .baris-filter{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin-bottom:16px; }
 .pills{ display:flex; flex-wrap:wrap; gap:8px; }
 .filter-pill{
-  font-size:13px; color:var(--redup); text-decoration:none; padding:8px 14px;
-  border-radius:999px; border:1px solid var(--garis); transition:.15s;
+  font-size:13px; color:var(--teks); text-decoration:none; padding:8px 14px; border-radius:999px;
+  border:1px solid var(--garis); background:#fff; font-weight:500; transition:.15s;
 }
-.filter-pill:hover{ background:rgba(45,226,255,.06); color:var(--teks); }
-.filter-pill.aktif{ background:rgba(45,226,255,.12); color:#aef6ff; border-color:rgba(45,226,255,.4); }
+.filter-pill:hover{ border-color:var(--oranye); color:var(--oranye); }
+.filter-pill.aktif{ background:var(--oranye); color:#fff; border-color:var(--oranye); font-weight:700; }
 
 /* ---------- Filter tanggal ---------- */
 .filter-tanggal{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-.filter-tanggal label{ font-size:12px; color:var(--redup); }
+.filter-tanggal label{ font-size:13px; color:var(--redup); font-weight:600; }
 input[type=date]{
-  background:rgba(6,8,18,.7); color:var(--teks); border:1px solid var(--garis);
-  border-radius:10px; padding:8px 12px; font-size:13px; outline:none; color-scheme:dark;
+  background:#fff; color:var(--teks); border:1px solid var(--garis); border-radius:9px;
+  padding:8px 12px; font-size:13px; outline:none;
 }
-input[type=date]:focus{ border-color:var(--cyan); box-shadow:0 0 0 3px rgba(45,226,255,.18); }
+input[type=date]:focus{ border-color:var(--oranye); box-shadow:0 0 0 3px rgba(244,122,31,.15); }
 
 /* ---------- Tombol ---------- */
 .btn{
-  font-size:13px; font-weight:600; color:var(--teks); background:rgba(125,145,210,.10);
-  border:1px solid var(--garis); border-radius:10px; padding:9px 16px; cursor:pointer;
-  text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:.15s;
+  font-size:13px; font-weight:600; color:var(--teks); background:#fff; border:1px solid var(--garis);
+  border-radius:9px; padding:9px 16px; cursor:pointer; text-decoration:none;
+  display:inline-flex; align-items:center; gap:8px; transition:.15s;
 }
-.btn:hover{ background:rgba(125,145,210,.18); }
-.btn:disabled{ opacity:.45; cursor:not-allowed; }
-.btn-danger{ color:#ffc6d1; background:rgba(255,61,240,.10); border-color:rgba(255,61,240,.35); }
-.btn-danger:hover{ background:rgba(255,61,240,.18); }
+.btn:hover{ background:#F1F5F9; }
+.btn-oranye{ background:var(--oranye); color:#fff; border-color:var(--oranye); }
+.btn-oranye:hover{ background:var(--oranye-tua); }
+.btn-danger{ background:var(--merah); color:#fff; border-color:var(--merah); }
+.btn-danger:hover{ filter:brightness(.93); }
 
-/* ---------- Aksi (tombol hapus kiri + total kanan) ---------- */
+/* ---------- Aksi (hapus kiri + total kanan) ---------- */
 .aksi{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin-bottom:14px; }
 .total{ font-size:13px; color:var(--redup); }
 .total b{ color:var(--teks); }
 
 /* ---------- Banner status ---------- */
-.banner{ border-radius:12px; padding:12px 16px; margin-bottom:16px; font-size:14px; }
-.banner-ok{ background:rgba(54,245,176,.10); border:1px solid rgba(54,245,176,.35); color:#b9ffe6; }
-.banner-info{ background:rgba(45,226,255,.08); border:1px solid rgba(45,226,255,.3); color:#aef6ff; }
+.banner{ border-radius:10px; padding:12px 16px; margin-bottom:16px; font-size:14px; font-weight:500; }
+.banner-ok{ background:#E6F6EF; border:1px solid #B7E6D1; color:var(--hijau); }
+.banner-info{ background:#E7F1FB; border:1px solid #C2DDF3; color:var(--biru-tua); }
 
 /* ---------- Tabel ---------- */
 .kartu{
-  background:var(--kartu); border:1px solid var(--garis); border-radius:16px; padding:8px;
-  box-shadow:0 16px 40px rgba(0,0,0,.4); overflow-x:auto;
+  background:var(--kartu); border:1px solid var(--garis); border-radius:14px; padding:6px;
+  box-shadow:0 6px 18px rgba(31,58,90,.06); overflow-x:auto;
 }
 table{ width:100%; border-collapse:collapse; font-size:14px; min-width:640px; }
 th{
-  text-align:left; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--cyan);
-  padding:13px 14px; border-bottom:1px solid var(--garis); white-space:nowrap;
+  text-align:left; font-size:11px; letter-spacing:.8px; text-transform:uppercase; color:var(--biru);
+  padding:14px 14px; border-bottom:2px solid var(--garis); white-space:nowrap; background:#F8FAFC;
 }
-td{ padding:12px 14px; border-bottom:1px solid rgba(125,145,210,.10); }
-tr:last-child td{ border-bottom:none; }
-tbody tr:hover td{ background:rgba(45,226,255,.05); }
-.id{ color:var(--redup); } .nama{ font-weight:600; }
+td{ padding:13px 14px; border-bottom:1px solid var(--garis); }
+tbody tr:last-child td{ border-bottom:none; }
+tbody tr:hover td{ background:#FFF7F0; }
+.id{ color:var(--redup); } .nama{ font-weight:700; }
 .skor{
-  display:inline-block; min-width:40px; text-align:center; font-weight:700; color:#aef6ff;
-  background:rgba(45,226,255,.12); border:1px solid rgba(45,226,255,.4); border-radius:8px; padding:3px 10px;
+  display:inline-block; min-width:40px; text-align:center; font-weight:700; color:#fff;
+  background:var(--biru); border-radius:8px; padding:3px 10px;
 }
-.benar{ font-weight:700; color:var(--teks); }
-.benar small{ color:var(--redup); font-weight:400; }
+.benar{ font-weight:700; color:var(--oranye-tua); }
+.benar small{ color:var(--redup); font-weight:500; }
 .waktu{ color:var(--redup); white-space:nowrap; }
 
-/* checkbox kolom */
-.cek{ width:16px; height:16px; accent-color:#2de2ff; cursor:pointer; vertical-align:middle; }
+.cek{ width:16px; height:16px; accent-color:var(--oranye); cursor:pointer; vertical-align:middle; }
 th.kol-cek, td.kol-cek{ width:38px; text-align:center; }
 
-/* badge lokasi */
 .lokasi-badge{
-  display:inline-block; font-size:12px; padding:3px 10px; border-radius:8px;
-  background:rgba(125,145,210,.12); border:1px solid var(--garis); color:var(--teks);
+  display:inline-block; font-size:12px; padding:3px 10px; border-radius:8px; font-weight:600;
+  background:#EDF1F6; border:1px solid var(--garis); color:var(--teks);
 }
-.lokasi-badge.cair{ color:#aef6ff; background:rgba(45,226,255,.10); border-color:rgba(45,226,255,.35); }
-.lokasi-badge.padat{ color:#ffc6f6; background:rgba(255,61,240,.10); border-color:rgba(255,61,240,.35); }
+.lokasi-badge.cair{ color:var(--biru); background:#E7F1FB; border-color:#C2DDF3; }
+.lokasi-badge.padat{ color:var(--oranye-tua); background:#FDEFE3; border-color:#F8D5B8; }
 .scene{ font-size:11px; color:var(--redup); margin-top:3px; }
 
-/* kosong */
-.kosong{ text-align:center; padding:48px 20px; color:var(--redup); }
+.kosong{ text-align:center; padding:46px 20px; color:var(--redup); }
 .kosong b{ display:block; color:var(--teks); font-size:16px; margin-bottom:6px; }
+
+/* ---------- Modal konfirmasi hapus ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(20,30,45,.55); display:none;
+  align-items:center; justify-content:center; padding:20px; z-index:50;
+}
+.modal-overlay.tampil{ display:flex; }
+.modal{
+  background:#fff; border-radius:16px; padding:26px 24px; max-width:400px; width:100%;
+  box-shadow:0 24px 60px rgba(0,0,0,.3); text-align:center; animation:munculModal .18s ease;
+}
+@keyframes munculModal{ from{ transform:translateY(10px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
+.modal-ikon{
+  width:60px; height:60px; border-radius:50%; background:#FDECEC; color:var(--merah);
+  display:flex; align-items:center; justify-content:center; margin:0 auto 14px;
+}
+.modal h3{ font-size:19px; color:var(--teks); margin-bottom:8px; }
+.modal p{ font-size:14px; color:var(--redup); line-height:1.55; margin-bottom:20px; }
+.modal-aksi{ display:flex; gap:10px; justify-content:center; }
+.modal-aksi .btn{ min-width:120px; justify-content:center; }
 
 /* ---------- Responsif HP ---------- */
 @media(max-width:760px){
   .app{ flex-direction:column; }
   .sidebar{ width:100%; height:auto; position:static; }
-  .menu{ gap:4px; }
+  .topbar{ position:static; }
   .baris-filter, .aksi{ flex-direction:column; align-items:stretch; }
 }
-@media (prefers-reduced-motion: reduce){ .item,.keluar,.btn,.filter-pill{ transition:none; } }
+@media (prefers-reduced-motion: reduce){ .item,.keluar,.btn,.filter-pill,.modal{ transition:none; animation:none; } }

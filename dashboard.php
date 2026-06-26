@@ -41,15 +41,15 @@ require __DIR__ . '/includes/header.php';
     <div class="angka"><?= $totalSemua ?></div>
     <div class="ket">Total Data Quiz Masuk</div>
   </div>
-  <div class="stat">
+  <div class="stat biru">
     <div class="angka"><?= $totalCair ?></div>
     <div class="ket">Cair &amp; Semi Padat<br><small>VRLabSimulation</small></div>
   </div>
-  <div class="stat magenta">
+  <div class="stat">
     <div class="angka"><?= $totalPadat ?></div>
     <div class="ket">Padat<br><small>VRLabSimulation_Padat</small></div>
   </div>
-  <div class="stat">
+  <div class="stat biru">
     <div class="angka"><?= $totalVRLab ?></div>
     <div class="ket">VR Lab (Umum)<br><small>VRLab</small></div>
   </div>
