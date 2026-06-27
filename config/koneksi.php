@@ -21,12 +21,12 @@ if ($isLokal) {
     $pass = '';
     $db   = 'quizlab_station';
 } else {
-    // ---------- HOSTING (InfinityFree) ----------
-    // ISI dari Control Panel InfinityFree -> "MySQL Databases":
-    $host = 'sqlXXX.infinityfree.com';     // MySQL Host Name
-    $user = 'epiz_XXXXXXX';                // MySQL User Name
-    $pass = 'PASSWORD_AKUN_INFINITYFREE';  // password akun InfinityFree
-    $db   = 'epiz_XXXXXXX_quizlab';        // MySQL Database Name
+    // ---------- HOSTING (AlwaysData) ----------
+    // ISI dari panel AlwaysData -> Databases -> MySQL:
+    $host = 'mysql-NAMAAKUN.alwaysdata.net'; // contoh: mysql-smk5quizlab.alwaysdata.net
+    $user = 'NAMAAKUN';                      // user MySQL (buat di panel; biasanya = nama akun)
+    $pass = 'PASSWORD_MYSQL';                // password user MySQL yang kamu buat
+    $db   = 'NAMAAKUN_quizlab';              // contoh: smk5quizlab_quizlab
 }
 
 $koneksi = mysqli_connect($host, $user, $pass, $db);

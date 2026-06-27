@@ -1,15 +1,15 @@
 -- =====================================================================
---  database_hosting.sql — Untuk IMPORT di phpMyAdmin HOSTING (InfinityFree)
+--  database_hosting.sql — Untuk IMPORT di phpMyAdmin HOSTING (AlwaysData)
 -- ---------------------------------------------------------------------
---  Di InfinityFree, database dibuat lewat Control Panel (MySQL Databases),
---  jadi file ini TANPA "CREATE DATABASE" / "USE" — hanya tabelnya saja.
+--  Di hosting, database dibuat lewat panel (bukan lewat SQL), jadi file ini
+--  TANPA "CREATE DATABASE" / "USE" — hanya tabelnya saja.
 --
---  Cara pakai:
---   1. Control Panel -> MySQL Databases -> buat database (mis. "quizlab").
---   2. Buka phpMyAdmin -> pilih database epiz_XXXXXXX_quizlab di kiri.
+--  Cara pakai (AlwaysData):
+--   1. Panel -> Databases -> MySQL -> buat database (mis. "quizlab") + user.
+--   2. Buka phpMyAdmin -> pilih database NAMAAKUN_quizlab di kiri.
 --   3. Tab "Import" -> pilih file ini -> "Go".
---   4. Lalu buka  https://DOMAINMU/database/setup_admin.php  (sekali) untuk
---      membuat akun admin, kemudian HAPUS file setup_admin.php.
+--   4. Lalu buka  https://NAMAAKUN.alwaysdata.net/database/setup_admin.php
+--      (sekali) untuk membuat akun admin, kemudian HAPUS file setup_admin.php.
 -- =====================================================================
 
 CREATE TABLE IF NOT EXISTS admin (
