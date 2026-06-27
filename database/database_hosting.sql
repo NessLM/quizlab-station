@@ -1,12 +1,12 @@
 -- =====================================================================
 --  database_hosting.sql — Untuk IMPORT di phpMyAdmin HOSTING (AlwaysData)
 -- ---------------------------------------------------------------------
---  Di hosting, database dibuat lewat panel (bukan lewat SQL), jadi file ini
+--  Database dibuat lewat panel AlwaysData, bukan lewat SQL, jadi file ini
 --  TANPA "CREATE DATABASE" / "USE" — hanya tabelnya saja.
 --
 --  Cara pakai (AlwaysData):
 --   1. Panel -> Databases -> MySQL -> buat database (mis. "quizlab") + user.
---   2. Buka phpMyAdmin -> pilih database NAMAAKUN_quizlab di kiri.
+--   2. Panel -> Databases -> MySQL -> phpMyAdmin -> pilih DB NAMAAKUN_quizlab.
 --   3. Tab "Import" -> pilih file ini -> "Go".
 --   4. Lalu buka  https://NAMAAKUN.alwaysdata.net/database/setup_admin.php
 --      (sekali) untuk membuat akun admin, kemudian HAPUS file setup_admin.php.

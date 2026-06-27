@@ -21,12 +21,11 @@ if ($isLokal) {
     $pass = '';
     $db   = 'quizlab_station';
 } else {
-    // ---------- HOSTING (AlwaysData) ----------
-    // ISI dari panel AlwaysData -> Databases -> MySQL:
-    $host = 'mysql-NAMAAKUN.alwaysdata.net'; // contoh: mysql-smk5quizlab.alwaysdata.net
-    $user = 'NAMAAKUN';                      // user MySQL (buat di panel; biasanya = nama akun)
-    $pass = 'PASSWORD_MYSQL';                // password user MySQL yang kamu buat
-    $db   = 'NAMAAKUN_quizlab';              // contoh: smk5quizlab_quizlab
+    // ---------- HOSTING (AlwaysData, akun: smkn) ----------
+    $host = 'mysql-quizlab-station.alwaysdata.net';  // host MySQL AlwaysData
+    $user = 'quizlab-station';                       // user MySQL (= nama akun)
+    $pass = 'pangkalpinanganakkerenSMKVR';        // <-- ISI password user MySQL 'smkn'
+    $db   = 'quizlab-station_quizlab-smkn5';               // database yang barusan kamu buat
 }
 
 $koneksi = mysqli_connect($host, $user, $pass, $db);
