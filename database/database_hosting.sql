@@ -1,0 +1,31 @@
+-- =====================================================================
+--  database_hosting.sql — Untuk IMPORT di phpMyAdmin HOSTING (InfinityFree)
+-- ---------------------------------------------------------------------
+--  Di InfinityFree, database dibuat lewat Control Panel (MySQL Databases),
+--  jadi file ini TANPA "CREATE DATABASE" / "USE" — hanya tabelnya saja.
+--
+--  Cara pakai:
+--   1. Control Panel -> MySQL Databases -> buat database (mis. "quizlab").
+--   2. Buka phpMyAdmin -> pilih database epiz_XXXXXXX_quizlab di kiri.
+--   3. Tab "Import" -> pilih file ini -> "Go".
+--   4. Lalu buka  https://DOMAINMU/database/setup_admin.php  (sekali) untuk
+--      membuat akun admin, kemudian HAPUS file setup_admin.php.
+-- =====================================================================
+
+CREATE TABLE IF NOT EXISTS admin (
+  id       INT          AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50)  NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,                 -- ter-hash (password_hash / bcrypt)
+  dibuat   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS hasil_quiz (
+  id     INT          AUTO_INCREMENT PRIMARY KEY,
+  nama   VARCHAR(100) NOT NULL,
+  kelas  VARCHAR(50)  NOT NULL,
+  score  INT          NOT NULL DEFAULT 0,          -- skor 0-100 (sudah dinormalisasi)
+  benar  INT          NOT NULL DEFAULT 0,          -- jumlah jawaban benar
+  total  INT          NOT NULL DEFAULT 0,          -- jumlah total soal
+  lokasi VARCHAR(50)  NOT NULL DEFAULT 'VRLab',    -- VRLab / VRLabSimulation / VRLabSimulation_Padat
+  waktu  TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
